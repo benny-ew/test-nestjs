@@ -7,18 +7,20 @@ export class CreateTaskDto {
     description: 'The title of the task',
     example: 'Implement task management API',
     maxLength: 255,
+    required: true,
   })
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(255)
+  @IsNotEmpty({ message: 'Title is required' })
+  @IsString({ message: 'Title must be a string' })
+  @MaxLength(255, { message: 'Title cannot be longer than 255 characters' })
   title: string;
 
   @ApiPropertyOptional({
     description: 'The detailed description of the task',
     example: 'Create CRUD endpoints for tasks with proper validation',
+    required: false,
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'Description must be a string' })
   description?: string;
 
   @ApiPropertyOptional({
