@@ -29,26 +29,10 @@ A NestJS application with PostgreSQL database integration for task management. T
 - Docker and Docker Compose setup
 - PostgreSQL database integration
 - pgAdmin for database management
+- TypeORM migrations for database schema management
+- Health endpoints for application monitoring
 - Environment variable configuration
 
-## Project structure
-
-```
-├── src
-│   ├── entities
-│   │   └── task.entity.ts       # Task entity definition
-│   ├── tasks
-│   │   ├── dto
-│   │   │   ├── create-task.dto.ts  # DTO for creating tasks
-│   │   │   └── update-task.dto.ts  # DTO for updating tasks
-│   │   ├── tasks.controller.ts  # REST endpoints for tasks
-│   │   ├── tasks.module.ts      # Tasks module
-│   │   └── tasks.service.ts     # Business logic for tasks
-│   ├── app.module.ts            # Main application module
-│   └── main.ts                  # Application entry point
-├── docker-compose.yml           # Docker Compose configuration
-└── Dockerfile                   # Docker configuration
-```
 
 ## Environment Configuration
 
@@ -77,15 +61,21 @@ $ docker-compose up -d
 
 # Access the API at http://localhost:3003
 # Access Swagger documentation at http://localhost:3003/api
-# Access pgAdmin at http://localhost:5050
-# Login to pgAdmin with admin@example.com / pgadmin_password
 ```
 
 ## Running locally
 
 ```bash
+# One-step development setup (installs dependencies, checks database, runs migrations)
+$ npm run setup
+
+# Or do the steps manually:
+
 # Install dependencies
 $ npm install
+
+# Run database migrations
+$ npm run migration:run
 
 # Development mode
 $ npm run start
@@ -95,6 +85,24 @@ $ npm run start:dev
 
 # Production mode
 $ npm run start:prod
+```
+
+## Database Migrations
+
+This project uses TypeORM migrations to manage the database schema. For more details, see [MIGRATIONS.md](MIGRATIONS.md).
+
+```bash
+# Generate a new migration
+$ npm run migration:generate -- src/migrations/YourMigrationName
+
+# Create an empty migration
+$ npm run migration:create -- src/migrations/CustomMigration
+
+# Run all pending migrations
+$ npm run migration:run
+
+# Revert the latest migration
+$ npm run migration:revert
 ```
 
 ## API Endpoints
@@ -115,9 +123,6 @@ $ npm run test
 
 # e2e tests
 $ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
 ## Deployment
@@ -133,28 +138,8 @@ $ mau deploy
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 

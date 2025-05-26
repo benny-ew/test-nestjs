@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, HttpCode, HttpStatus, UsePipes, ValidationPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Patch, Delete, HttpCode, HttpStatus, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from '../entities/task.entity';
@@ -62,11 +62,25 @@ export class TasksController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a task by ID' })
+  @ApiOperation({ summary: 'Replace a task by ID (full update)' })
   @ApiParam({ name: 'id', description: 'The ID of the task', example: 'e2a7dde0-5e80-4b86-a60c-4c5ed2a72bb5' })
   @ApiResponse({ status: 200, description: 'Task updated successfully', type: Task })
+  @ApiResponse({ status: 400, description: 'Bad Request: Invalid input or validation failed' })
   @ApiResponse({ status: 404, description: 'Task not found' })
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto): Promise<Task> {
+    return this.tasksService.update(id, updateTaskDto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update a task partially by ID' })
+  @ApiParam({ name: 'id', description: 'The ID of the task', example: 'e2a7dde0-5e80-4b86-a60c-4c5ed2a72bb5' })
+  @ApiBody({ type: UpdateTaskDto })
+  @ApiResponse({ status: 200, description: 'Task partially updated successfully', type: Task })
+  @ApiResponse({ status: 400, description: 'Bad Request: Invalid input or validation failed' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  patch(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto): Promise<Task> {
     return this.tasksService.update(id, updateTaskDto);
   }
 

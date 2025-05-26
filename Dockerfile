@@ -23,8 +23,11 @@ RUN npm install
 # Copy source files
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the application with TypeORM config
+RUN npm run build 
+
+# Make scripts executable
+RUN chmod +x ./scripts/*.sh
 
 # Production image
 FROM ubuntu:24.04 As production
@@ -52,11 +55,21 @@ COPY package*.json ./
 # Install only production dependencies
 RUN npm install --only=production
 
-# Copy built application from development stage
+# Copy built application and necessary files from development stage
 COPY --from=development /usr/src/app/dist ./dist
+COPY --from=development /usr/src/app/scripts ./scripts
+
+# Add wget for healthcheck
+RUN apt-get update && apt-get install -y wget && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Make scripts executable
+RUN chmod +x ./scripts/*.sh
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 CMD ./scripts/healthcheck.sh
 
 # Expose API port
 EXPOSE 3003
 
-# Start the application
-CMD ["node", "dist/main"]
+# Start the application with migrations
+CMD ["./scripts/start-with-migrations.sh"]

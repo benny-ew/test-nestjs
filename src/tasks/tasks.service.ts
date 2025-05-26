@@ -74,9 +74,16 @@ export class TasksService {
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
-    const task = await this.findOne(id);
-    const updatedTask = Object.assign(task, updateTaskDto);
-    return this.taskRepository.save(updatedTask);
+    try {
+      const task = await this.findOne(id);
+      const updatedTask = Object.assign(task, updateTaskDto);
+      return await this.taskRepository.save(updatedTask);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to update task: ' + error.message);
+    }
   }
 
   async remove(id: string): Promise<void> {

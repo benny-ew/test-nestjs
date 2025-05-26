@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Task } from './entities/task.entity';
 import { TasksModule } from './tasks/tasks.module';
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -20,14 +22,20 @@ import { TasksModule } from './tasks/tasks.module';
         port: +configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
+        database: configService.get('DB_NAME') || 'nestjs_db',
         entities: [Task],
         autoLoadEntities: true,
+        // Disable synchronize in production - use migrations instead
         synchronize: configService.get('NODE_ENV') !== 'production',
+        // Add migration configuration for production
+        migrationsRun: configService.get('NODE_ENV') === 'production',
+        migrations: ['dist/migrations/*.js'],
       }),
     }),
     TypeOrmModule.forFeature([Task]),
     TasksModule,
+    TerminusModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

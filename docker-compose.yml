@@ -9,7 +9,7 @@ services:
     ports:
       - "${PORT:-3003}:3003"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3003/api"]
+      test: ["CMD", "./scripts/healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -21,7 +21,8 @@ services:
       - DB_PORT=${DB_PORT:-5432}
       - DB_USERNAME=${DB_USERNAME:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres_password}
-      - DB_NAME=${DB_NAME:-nestjs_db}
+      - DB_DATABASE=${DB_DATABASE:-nestjs_db}
+      - DB_NAME=${DB_DATABASE:-nestjs_db}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -39,7 +40,7 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres_password}
-      - POSTGRES_DB=${DB_NAME:-nestjs_db}
+      - POSTGRES_DB=${DB_DATABASE:-nestjs_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
