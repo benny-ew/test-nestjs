@@ -18,10 +18,10 @@ if [ "$NODE_ENV" = "production" ]; then
   
   echo "🗄️ Running database migrations..."
   # In production we use compiled JS files
-  node ./dist/node_modules/typeorm/cli.js migration:run -d ./dist/src/config/typeorm.config.js
+  node -r tsconfig-paths/register ./dist/node_modules/typeorm/cli.js migration:run -d ./dist/src/config/typeorm.config.js
   
   echo "🚀 Starting application..."
-  node dist/main
+  node -r tsconfig-paths/register dist/main
 else
   echo "🗄️ Running database migrations..."
   npm run migration:run

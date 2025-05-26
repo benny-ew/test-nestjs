@@ -52,8 +52,9 @@ WORKDIR /usr/src/app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
+# Install production dependencies plus tsconfig-paths
 RUN npm install --only=production
+RUN npm install tsconfig-paths
 
 # Copy built application and necessary files from development stage
 COPY --from=development /usr/src/app/dist ./dist
