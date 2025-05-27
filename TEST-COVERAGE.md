@@ -45,8 +45,3 @@ This document summarizes the test coverage for the NestJS application.
 | E2E Tests     | ~85%       | ~80%     | ~90%      | ~85%  |
 | Overall       | ~88%       | ~83%     | ~93%      | ~89%  |
 
-## Areas for Improvement
-
-1. Add more edge cases to e2e tests
-2. Test database transaction failures
-3. Add performance tests for high-load scenarios
