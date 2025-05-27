@@ -12,7 +12,7 @@ describe('TasksController', () => {
 
   // Mock data
   const mockTask: Task = {
-    id: '1',
+    id: '123e4567-e89b-12d3-a456-426614174000',
     title: 'Test Task',
     description: 'Test Description',
     status: TaskStatus.TO_DO,
@@ -23,7 +23,7 @@ describe('TasksController', () => {
   const mockTasks: Task[] = [
     mockTask,
     {
-      id: '2',
+      id: '987f6543-d21b-45e7-b789-123456789012',
       title: 'Another Task',
       description: 'Another Description',
       status: TaskStatus.IN_PROGRESS,
@@ -87,10 +87,10 @@ describe('TasksController', () => {
 
   describe('findOne', () => {
     it('should return a single task', async () => {
-      const result = await controller.findOne('1');
+      const result = await controller.findOne('123e4567-e89b-12d3-a456-426614174000');
       
       expect(result).toEqual(mockTask);
-      expect(service.findOne).toHaveBeenCalledWith('1');
+      expect(service.findOne).toHaveBeenCalledWith('123e4567-e89b-12d3-a456-426614174000');
     });
   });
 
