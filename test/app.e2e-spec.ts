@@ -15,11 +15,15 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
   });
+  
+  afterEach(async () => {
+    await app.close();
+  });
 
   it('/ (GET)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect('You are running the Task Management API!');
   });
 });

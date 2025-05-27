@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Patch, Delete, HttpCode, HttpStatus, UsePipes, ValidationPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Patch, Delete, HttpCode, HttpStatus, UsePipes, ValidationPipe, Query, NotFoundException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from '../entities/task.entity';
@@ -48,6 +48,12 @@ export class TasksController {
   @ApiResponse({ status: 200, description: 'Task found', type: Task })
   @ApiResponse({ status: 404, description: 'Task not found' })
   findOne(@Param('id') id: string): Promise<Task> {
+    // Check if ID is a valid UUID
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      throw new NotFoundException(`Task with ID "${id}" not found - Invalid UUID format`);
+    }
+    
     return this.tasksService.findOne(id);
   }
 

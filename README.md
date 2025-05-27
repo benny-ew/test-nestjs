@@ -115,15 +115,34 @@ $ npm run migration:revert
 | PUT    | /tasks/:id      | Update a task         | `{ "title": "Updated Task", "status": "IN_PROGRESS" }`        |
 | DELETE | /tasks/:id      | Delete a task         | N/A                                                           |
 
-## Run tests
+## Testing
+
+This project includes comprehensive test coverage with both unit tests and integration tests.
 
 ```bash
-# unit tests
+# Run all tests (unit tests, coverage, and e2e tests)
+$ ./scripts/run-tests.sh
+
+# Run only unit tests
 $ npm run test
 
-# e2e tests
+# Run tests with coverage report
+$ npm run test:cov
+
+# Run e2e tests
 $ npm run test:e2e
 ```
+
+For detailed information about the testing approach, see [TESTING.md](TESTING.md).
+
+### Testing Best Practices
+
+- Write unit tests for all service methods
+- Create integration tests for API endpoints
+- Mock external dependencies in unit tests
+- Use real database for e2e tests
+- Test error handling and edge cases
+- Maintain test coverage above 80%
 
 ## Deployment
 
